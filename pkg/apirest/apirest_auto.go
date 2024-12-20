@@ -49,22 +49,22 @@ const (
 // Characteristics defines model for Characteristics.
 type Characteristics struct {
 	// DEX Dexterity
-	DEX int32 `json:"DEX"`
+	DEX int `json:"DEX"`
 
 	// EDU Education
-	EDU int32 `json:"EDU"`
+	EDU int `json:"EDU"`
 
 	// END Endurance
-	END int32 `json:"END"`
+	END int `json:"END"`
 
 	// INT Intelligence
-	INT int32 `json:"INT"`
+	INT int `json:"INT"`
 
 	// SOC Social
-	SOC int32 `json:"SOC"`
+	SOC int `json:"SOC"`
 
 	// STR Strength
-	STR int32 `json:"STR"`
+	STR int `json:"STR"`
 }
 
 // CitizenCategory How exceptional are the characteristics of the NPC

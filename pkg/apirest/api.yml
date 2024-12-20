@@ -39,27 +39,27 @@ components:
       properties:
         STR:
           type: integer
-          format: int32
+          format: int
           description: Strength
         DEX:
           type: integer
-          format: int32
+          format: int
           description: Dexterity
         END:
           type: integer
-          format: int32
+          format: int
           description: Endurance
         INT:
           type: integer
-          format: int32
+          format: int
           description: Intelligence
         EDU:
           type: integer
-          format: int32
+          format: int
           description: Education
         SOC:
           type: integer
-          format: int32
+          format: int
           description: Social
       required:
         - STR
