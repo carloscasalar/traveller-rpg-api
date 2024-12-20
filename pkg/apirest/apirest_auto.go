@@ -83,17 +83,17 @@ type Gender string
 
 // NPC defines model for NPC.
 type NPC struct {
-	Characteristics *Characteristics `json:"characteristics,omitempty"`
+	Characteristics Characteristics `json:"characteristics"`
 
 	// CitizenCategory How exceptional are the characteristics of the NPC
-	CitizenCategory *CitizenCategory `json:"citizen_category,omitempty"`
-	Experience      *Experience      `json:"experience,omitempty"`
-	FirstsName      *string          `json:"firsts_name,omitempty"`
+	CitizenCategory CitizenCategory `json:"citizen_category"`
+	Experience      Experience      `json:"experience"`
+	FirstsName      string          `json:"firsts_name"`
 
 	// Role Role of the NPC
-	Role    *Role     `json:"role,omitempty"`
-	Skills  *[]string `json:"skills,omitempty"`
-	Surname *string   `json:"surname,omitempty"`
+	Role    Role     `json:"role"`
+	Skills  []string `json:"skills"`
+	Surname string   `json:"surname"`
 }
 
 // NPCRequest defines model for NPCRequest.
