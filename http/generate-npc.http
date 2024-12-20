@@ -1,0 +1,11 @@
+### Post generate Pilot NPC
+POST http://localhost:8787/api/npcs
+Content-Type: application/json
+
+{
+  "role": "pilot",
+  "citizen_category": "average",
+  "experience": "regular",
+  "gender": "unspecified"
+}
+###
