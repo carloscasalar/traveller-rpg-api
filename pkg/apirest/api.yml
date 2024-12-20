@@ -1,0 +1,156 @@
+---
+openapi: 3.0.0
+info:
+  title: Traveller RPG API
+  version: 1.0.0
+  description: An API of helpers for the Traveller RPG game
+paths:
+  /api/npcs:
+    post:
+      summary: Generate a new NPC
+      tags:
+        - NPC
+        - Generate
+      operationId: generateNPC
+      requestBody:
+        required: true
+        content:
+          application/json:
+              schema:
+                $ref: '#/components/schemas/NPCRequest'
+      responses:
+        '200':
+          description: NPG generated
+          content:
+              application/json:
+                schema:
+                    $ref: '#/components/schemas/NPC'
+        '400':
+          description: Invalid input
+          content:
+              application/json:
+                  schema:
+                      $ref: '#/components/schemas/Error'
+
+components:
+  schemas:
+    Characteristics:
+      type: object
+      properties:
+        STR:
+          type: integer
+          format: int32
+          description: Strength
+        DEX:
+          type: integer
+          format: int32
+          description: Dexterity
+        END:
+          type: integer
+          format: int32
+          description: Endurance
+        INT:
+          type: integer
+          format: int32
+          description: Intelligence
+        EDU:
+          type: integer
+          format: int32
+          description: Education
+        SOC:
+          type: integer
+          format: int32
+          description: Social
+      required:
+        - STR
+        - DEX
+        - END
+        - INT
+        - EDU
+        - SOC
+    CitizenCategory:
+      type: string
+      enum:
+        - below_average
+        - average
+        - above_average
+        - exceptional
+      default: average
+      description: How exceptional are the characteristics of the NPC
+    Experience:
+      type: string
+      enum:
+        - recruit
+        - rookie
+        - intermediate
+        - regular
+        - veteran
+        - elite
+      default: regular
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+      example:
+        message: "Role is required"
+    NPCRequest:
+      type: object
+      properties:
+        citizen_category:
+          $ref: '#/components/schemas/CitizenCategory'
+        experience:
+          $ref: '#/components/schemas/Experience'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        role:
+          $ref: '#/components/schemas/Role'
+      required:
+        - role
+    NPC:
+      type: object
+      properties:
+        firsts_name:
+          type: string
+        surname:
+          type: string
+        role:
+          $ref: '#/components/schemas/Role'
+        citizen_category:
+          $ref: '#/components/schemas/CitizenCategory'
+        experience:
+          $ref: '#/components/schemas/Experience'
+        skills:
+          type: array
+          items:
+            type: string
+        characteristics:
+            $ref: '#/components/schemas/Characteristics'
+    Gender:
+      type: string
+      enum:
+        - female
+        - male
+        - unspecified
+      default: unspecified
+      description: Gender. If you don't care, just omit it or use unspecified
+    Role:
+      type: string
+      enum:
+        - pilot
+        - navigator
+        - engineer
+        - steward
+        - medic
+        - marine
+        - gunner
+        - scout
+        - technician
+        - leader
+        - diplomat
+        - entertainer
+        - trader
+        - thug
+      description: Role of the NPC

@@ -1,0 +1,9 @@
+---
+package: apirest
+generate:
+  strict-server: true
+  models: true
+output: apirest_auto.go
+output-options:
+  skip-prune: true
+  nullable-type: true
