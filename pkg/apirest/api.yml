@@ -16,21 +16,21 @@ paths:
         required: true
         content:
           application/json:
-              schema:
-                $ref: '#/components/schemas/NPCRequest'
+            schema:
+              $ref: '#/components/schemas/NPCRequest'
       responses:
         '200':
           description: NPG generated
           content:
-              application/json:
-                schema:
-                    $ref: '#/components/schemas/NPC'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NPC'
         '400':
           description: Invalid input
           content:
-              application/json:
-                  schema:
-                      $ref: '#/components/schemas/Error'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
 components:
   schemas:
@@ -127,7 +127,7 @@ components:
           items:
             type: string
         characteristics:
-            $ref: '#/components/schemas/Characteristics'
+          $ref: '#/components/schemas/Characteristics'
       required:
         - firsts_name
         - surname
