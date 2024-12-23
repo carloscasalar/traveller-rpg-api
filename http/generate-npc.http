@@ -8,4 +8,17 @@ Content-Type: application/json
   "experience": "regular",
   "gender": "unspecified"
 }
+
+### Method not allowed
+GET http://localhost:8787/api/npcs/single
+
+### Role is required
+POST http://localhost:8787/api/npcs/single
+Content-Type: application/json
+
+{
+  "citizen_category": "average",
+  "experience": "regular",
+  "gender": "unspecified"
+}
 ###

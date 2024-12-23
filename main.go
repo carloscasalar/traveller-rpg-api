@@ -35,12 +35,11 @@ func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	request := generator.NewGenerateCharacterRequestBuilder().
-		CitizenCategory(toCitizenCategory(npcRequest.CitizenCategory)).
-		Experience(toExperience(npcRequest.Experience)).
-		Role(toRole(npcRequest.Role)).
-		Gender(toGender(npcRequest.Gender)).
-		Build()
+	request, err := buildCharacterRequest(npcRequest)
+	if err != nil {
+		http.Error(w, errorPayload(err.Error()), http.StatusBadRequest)
+		return
+	}
 
 	generated, err := npcGenerator.Generate(*request)
 	if err != nil {
@@ -60,6 +59,28 @@ func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 	if err := json.NewEncoder(w).Encode(npc); err != nil {
 		http.Error(w, errorPayload("failed to encode response"), http.StatusInternalServerError)
 	}
+}
+
+func buildCharacterRequest(npcRequest apirest.NPCRequest) (*generator.GenerateCharacterRequest, error) {
+	if npcRequest.Role == "" {
+		return nil, fmt.Errorf("role is required")
+	}
+	requestBuilder := generator.NewGenerateCharacterRequestBuilder().
+		Role(toRole(npcRequest.Role))
+
+	if npcRequest.Experience != nil {
+		requestBuilder = requestBuilder.Experience(toExperience(npcRequest.Experience))
+	}
+
+	if npcRequest.CitizenCategory != nil {
+		requestBuilder = requestBuilder.CitizenCategory(toCitizenCategory(npcRequest.CitizenCategory))
+	}
+
+	if npcRequest.Gender != nil {
+		requestBuilder = requestBuilder.Gender(toGender(npcRequest.Gender))
+	}
+
+	return requestBuilder.Build(), nil
 }
 
 func toRestCharacteristics(characteristics map[generator.Characteristic]int) apirest.Characteristics {
