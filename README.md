@@ -37,7 +37,7 @@ make deploy # deploy worker
 - Just send HTTP request using some tools like curl.
 
 ```bash
-$ curl -X POST http://localhost:8787/api/npcs \
+$ curl -X POST http://localhost:8787/api/npcs/single \
 -H "Content-Type: application/json" \
 -d '{
   "role": "pilot",

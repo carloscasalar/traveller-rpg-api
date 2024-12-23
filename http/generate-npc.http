@@ -1,5 +1,5 @@
 ### Post generate Pilot NPC
-POST http://localhost:8787/api/npcs
+POST http://localhost:8787/api/npcs/single
 Content-Type: application/json
 
 {

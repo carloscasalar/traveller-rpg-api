@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/api/npcs", generateNPCHandler)
+	http.HandleFunc("/api/npcs/single", generateNPCHandler)
 
 	workers.Serve(nil) // use http.DefaultServeMux
 }
