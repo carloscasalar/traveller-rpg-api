@@ -59,22 +59,14 @@ func buildCharacterRequest(npcRequest apirest.NPCRequest) (*generator.GenerateCh
 	if npcRequest.Role == "" {
 		return nil, fmt.Errorf("role is required")
 	}
-	requestBuilder := generator.NewGenerateCharacterRequestBuilder().
-		Role(toRole(npcRequest.Role))
+	request := generator.NewGenerateCharacterRequestBuilder().
+		Role(toRole(npcRequest.Role)).
+		Experience(toExperience(npcRequest.Experience)).
+		CitizenCategory(toCitizenCategory(npcRequest.CitizenCategory)).
+		Gender(toGender(npcRequest.Gender)).
+		Build()
 
-	if npcRequest.Experience != nil {
-		requestBuilder = requestBuilder.Experience(toExperience(npcRequest.Experience))
-	}
-
-	if npcRequest.CitizenCategory != nil {
-		requestBuilder = requestBuilder.CitizenCategory(toCitizenCategory(npcRequest.CitizenCategory))
-	}
-
-	if npcRequest.Gender != nil {
-		requestBuilder = requestBuilder.Gender(toGender(npcRequest.Gender))
-	}
-
-	return requestBuilder.Build(), nil
+	return request, nil
 }
 
 func toRestCharacteristics(characteristics map[generator.Characteristic]int) apirest.Characteristics {

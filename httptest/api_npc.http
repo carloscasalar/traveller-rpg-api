@@ -1,4 +1,15 @@
-### Post generate Pilot NPC
+### Post generate Pilot female NPC
+POST http://localhost:8787/api/npcs/single
+Content-Type: application/json
+
+{
+  "role": "gunner",
+  "citizen_category": "above_average",
+  "experience": "veteran",
+  "gender": "female"
+}
+
+### Post generate Pilot male NPC
 POST http://localhost:8787/api/npcs/single
 Content-Type: application/json
 
@@ -6,7 +17,17 @@ Content-Type: application/json
   "role": "pilot",
   "citizen_category": "average",
   "experience": "regular",
-  "gender": "unspecified"
+  "gender": "male"
+}
+
+### Post generate Pilot NPC without specifying the gender
+POST http://localhost:8787/api/npcs/single
+Content-Type: application/json
+
+{
+  "role": "pilot",
+  "citizen_category": "average",
+  "experience": "regular"
 }
 
 ### Method not allowed

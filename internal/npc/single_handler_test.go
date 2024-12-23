@@ -27,13 +27,46 @@ func TestNPCSingleHandler_when_request_is_valid(t *testing.T) {
 			name: "and all fields are provided, generated NPC should have the specified values",
 			body: []byte(`{
 				"role":             "pilot",
-				"citizen_category": "average",
-				"experience":       "regular",
+				"citizen_category": "above_average",
+				"experience":       "rookie",
+				"gender":           "unspecified"
+			}`),
+			expectedRole:            "pilot",
+			expectedCitizenCategory: "above_average",
+			expectedExperience:      "rookie",
+		},
+		{
+			name: "and citizen category is not provided, generated NPC should have average citizen category",
+			body: []byte(`{
+				"role":             "pilot",
+				"experience":       "rookie",
 				"gender":           "unspecified"
 			}`),
 			expectedRole:            "pilot",
 			expectedCitizenCategory: "average",
+			expectedExperience:      "rookie",
+		},
+		{
+			name: "and experience is not provided, generated NPC should have regular experience",
+			body: []byte(`{
+				"role":             "pilot",
+				"citizen_category": "above_average",
+				"gender":           "unspecified"
+			}`),
+			expectedRole:            "pilot",
+			expectedCitizenCategory: "above_average",
 			expectedExperience:      "regular",
+		},
+		{
+			name: "and gender is not provided, it should generate a NPC anyway",
+			body: []byte(`{
+				"role":             "pilot",
+				"citizen_category": "above_average",
+				"experience":       "rookie"
+			}`),
+			expectedRole:            "pilot",
+			expectedCitizenCategory: "above_average",
+			expectedExperience:      "rookie",
 		},
 	}
 
