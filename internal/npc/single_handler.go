@@ -6,7 +6,6 @@ import (
 	"net/http"
 
 	"github.com/carloscasalar/traveller-npc-generator/pkg/generator"
-	"github.com/carloscasalar/traveller-rpg-api/internal/payload"
 	"github.com/carloscasalar/traveller-rpg-api/pkg/apirest"
 )
 
@@ -14,31 +13,31 @@ import (
 func SingleHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if req.Method != http.MethodPost {
-		http.Error(w, payload.Error("method not allowed"), http.StatusMethodNotAllowed)
+		setError(w, "method not allowed", http.StatusMethodNotAllowed)
 		return
 	}
 
 	var npcRequest apirest.NPCRequest
 	if err := json.NewDecoder(req.Body).Decode(&npcRequest); err != nil {
-		http.Error(w, payload.Error("invalid request body"), http.StatusBadRequest)
+		setError(w, "invalid request body", http.StatusBadRequest)
 		return
 	}
 
 	npcGenerator, err := generator.NewNpcGeneratorBuilder().Build()
 	if err != nil {
-		http.Error(w, payload.Error("failed to create NPC generator"), http.StatusInternalServerError)
+		setError(w, "failed to create NPC generator", http.StatusInternalServerError)
 		return
 	}
 
 	request, err := buildCharacterRequest(npcRequest)
 	if err != nil {
-		http.Error(w, payload.Error(err.Error()), http.StatusBadRequest)
+		setError(w, err.Error(), http.StatusBadRequest)
 		return
 	}
 
 	generated, err := npcGenerator.Generate(*request)
 	if err != nil {
-		http.Error(w, payload.Error(fmt.Sprintf("unable to generate NPC: %s", err.Error())), http.StatusBadRequest)
+		setError(w, fmt.Sprintf("unable to generate NPC: %s", err.Error()), http.StatusBadRequest)
 		return
 	}
 	npc := apirest.NPC{
@@ -52,7 +51,7 @@ func SingleHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(npc); err != nil {
-		http.Error(w, payload.Error("failed to encode response"), http.StatusInternalServerError)
+		setError(w, "failed to encode response", http.StatusInternalServerError)
 	}
 }
 
@@ -174,7 +173,6 @@ func toGender(gender *apirest.Gender) generator.Gender {
 }
 
 func toRole(role apirest.Role) generator.Role {
-	// Roles: pilot|navigator|engineer|steward|medic|marine|gunner|scout|technician|leader|diplomat|entertainer|trader|thug
 	switch role {
 	case apirest.Pilot:
 		return generator.RolePilot
@@ -247,4 +245,10 @@ func toCitizenCategory(category *apirest.CitizenCategory) generator.CitizenCateg
 	default:
 		return generator.CitizenCategoryAverage
 	}
+}
+
+func setError(w http.ResponseWriter, message string, code int) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(code)
+	_ = json.NewEncoder(w).Encode(map[string]string{"message": message})
 }
