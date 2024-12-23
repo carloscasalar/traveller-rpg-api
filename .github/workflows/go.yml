@@ -1,0 +1,36 @@
+---
+# This workflow will build a golang project
+# for more information see:
+#   https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: 'go.mod'
+
+      - name: Build
+        run: go build -v ./...
+
+      - name: Install revive
+        run: go install github.com/mgechev/revive@latest
+
+      - name: Lint
+        run: make lint
+
+      - name: Test
+        run: go test -v ./...
