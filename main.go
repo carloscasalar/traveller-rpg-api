@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/carloscasalar/traveller-npc-generator/pkg/generator"
+	"github.com/carloscasalar/traveller-rpg-api/internal/payload"
 	"github.com/carloscasalar/traveller-rpg-api/pkg/apirest"
 	"net/http"
 
@@ -19,31 +20,31 @@ func main() {
 func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if req.Method != http.MethodPost {
-		http.Error(w, errorPayload("method not allowed"), http.StatusMethodNotAllowed)
+		http.Error(w, payload.Error("method not allowed"), http.StatusMethodNotAllowed)
 		return
 	}
 
 	var npcRequest apirest.NPCRequest
 	if err := json.NewDecoder(req.Body).Decode(&npcRequest); err != nil {
-		http.Error(w, errorPayload("invalid request body"), http.StatusBadRequest)
+		http.Error(w, payload.Error("invalid request body"), http.StatusBadRequest)
 		return
 	}
 
 	npcGenerator, err := generator.NewNpcGeneratorBuilder().Build()
 	if err != nil {
-		http.Error(w, errorPayload("failed to create NPC generator"), http.StatusInternalServerError)
+		http.Error(w, payload.Error("failed to create NPC generator"), http.StatusInternalServerError)
 		return
 	}
 
 	request, err := buildCharacterRequest(npcRequest)
 	if err != nil {
-		http.Error(w, errorPayload(err.Error()), http.StatusBadRequest)
+		http.Error(w, payload.Error(err.Error()), http.StatusBadRequest)
 		return
 	}
 
 	generated, err := npcGenerator.Generate(*request)
 	if err != nil {
-		http.Error(w, errorPayload(fmt.Sprintf("unable to generate NPC: %s", err.Error())), http.StatusBadRequest)
+		http.Error(w, payload.Error(fmt.Sprintf("unable to generate NPC: %s", err.Error())), http.StatusBadRequest)
 		return
 	}
 	npc := apirest.NPC{
@@ -57,7 +58,7 @@ func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(npc); err != nil {
-		http.Error(w, errorPayload("failed to encode response"), http.StatusInternalServerError)
+		http.Error(w, payload.Error("failed to encode response"), http.StatusInternalServerError)
 	}
 }
 
@@ -252,8 +253,4 @@ func toCitizenCategory(category *apirest.CitizenCategory) generator.CitizenCateg
 	default:
 		return generator.CitizenCategoryAverage
 	}
-}
-
-func errorPayload(message string) string {
-	return fmt.Sprintf(`{"message": "%s"}`, message)
 }
