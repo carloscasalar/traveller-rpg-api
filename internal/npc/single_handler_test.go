@@ -7,6 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	"github.com/carloscasalar/traveller-rpg-api/pkg/apirest"
+
 	"github.com/stretchr/testify/require"
 
 	"github.com/stretchr/testify/assert"
@@ -89,6 +91,110 @@ func TestNPCSingleHandler_when_request_is_valid(t *testing.T) {
 			assert.Equal(t, tt.expectedExperience, generatedNPC.Experience)
 			assert.Equal(t, tt.expectedRole, generatedNPC.Role)
 			assert.NotEmpty(t, generatedNPC.Skills)
+		})
+	}
+}
+
+func TestNPCSingleHandler_should_properly_map_citizen_category(t *testing.T) {
+	tests := []struct {
+		requestedCategory apirest.CitizenCategory
+		expectedCategory  string
+	}{
+		{apirest.BelowAverage, "below_average"},
+		{apirest.Average, "average"},
+		{apirest.AboveAverage, "above_average"},
+		{apirest.Exceptional, "exceptional"},
+	}
+
+	for _, tt := range tests {
+		t.Run(string(tt.requestedCategory), func(t *testing.T) {
+			payload := []byte(`{
+				"citizen_category": "` + tt.requestedCategory + `",
+				"role":             "pilot"
+            }`)
+			req := httptest.NewRequest(http.MethodPost, "/npc/single", bytes.NewReader(payload))
+			req.Header.Set("Content-Type", "application/json")
+			rr := httptest.NewRecorder()
+
+			handler := http.HandlerFunc(npc.SingleHandler)
+			handler.ServeHTTP(rr, req)
+
+			require.Equal(t, http.StatusOK, rr.Code)
+			generatedNPC := extractNPC(t, rr.Body.String())
+			assert.Equal(t, tt.expectedCategory, generatedNPC.CitizenCategory)
+		})
+	}
+}
+
+func TestNPCSingleHandler_should_properly_map_experience(t *testing.T) {
+	tests := []struct {
+		requestedExperience apirest.Experience
+		expectedExperience  string
+	}{
+		{apirest.Recruit, "recruit"},
+		{apirest.Rookie, "rookie"},
+		{apirest.Intermediate, "intermediate"},
+		{apirest.Regular, "regular"},
+		{apirest.Veteran, "veteran"},
+		{apirest.Elite, "elite"},
+	}
+
+	for _, tt := range tests {
+		t.Run(string(tt.requestedExperience), func(t *testing.T) {
+			payload := []byte(`{
+				"experience": "` + tt.requestedExperience + `",
+				"role":             "pilot"
+            }`)
+			req := httptest.NewRequest(http.MethodPost, "/npc/single", bytes.NewReader(payload))
+			req.Header.Set("Content-Type", "application/json")
+			rr := httptest.NewRecorder()
+
+			handler := http.HandlerFunc(npc.SingleHandler)
+			handler.ServeHTTP(rr, req)
+
+			require.Equal(t, http.StatusOK, rr.Code)
+			generatedNPC := extractNPC(t, rr.Body.String())
+			assert.Equal(t, tt.expectedExperience, generatedNPC.Experience)
+		})
+	}
+}
+
+func TestNPCSingleHandler_should_properly_map_role(t *testing.T) {
+	tests := []struct {
+		requestedRole apirest.Role
+		expectedRole  string
+	}{
+		{apirest.Diplomat, "diplomat"},
+		{apirest.Engineer, "engineer"},
+		{apirest.Entertainer, "entertainer"},
+		{apirest.Gunner, "gunner"},
+		{apirest.Leader, "leader"},
+		{apirest.Marine, "marine"},
+		{apirest.Medic, "medic"},
+		{apirest.Navigator, "navigator"},
+		{apirest.Pilot, "pilot"},
+		{apirest.Scout, "scout"},
+		{apirest.Steward, "steward"},
+		{apirest.Technician, "technician"},
+		{apirest.Thug, "thug"},
+		{apirest.Trader, "trader"},
+	}
+
+	for _, tt := range tests {
+		t.Run(string(tt.requestedRole), func(t *testing.T) {
+			payload := []byte(`{
+				"role": "` + tt.requestedRole + `"
+            }`)
+			req := httptest.NewRequest(http.MethodPost, "/npc/single", bytes.NewReader(payload))
+			req.Header.Set("Content-Type", "application/json")
+			rr := httptest.NewRecorder()
+
+			handler := http.HandlerFunc(npc.SingleHandler)
+			handler.ServeHTTP(rr, req)
+
+			require.Equal(t, http.StatusOK, rr.Code)
+			generatedNPC := extractNPC(t, rr.Body.String())
+			assert.Equal(t, tt.expectedRole, generatedNPC.Role)
 		})
 	}
 }
