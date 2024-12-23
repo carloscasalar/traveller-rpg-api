@@ -109,7 +109,7 @@ func TestNPCSingleHandler_when_request_is_invalid(t *testing.T) {
 			expectedMessage: "method not allowed",
 		},
 		{
-			name:   "Role is required",
+			name:   "because role is not provided message should be role is required",
 			method: http.MethodPost,
 			body: []byte(`{
 				"citizen_category": "average",
@@ -118,6 +118,58 @@ func TestNPCSingleHandler_when_request_is_invalid(t *testing.T) {
 			}`),
 			expectedStatus:  http.StatusBadRequest,
 			expectedMessage: "role is required",
+		},
+		{
+			name:   "because citizen category is invalid message should properly say so",
+			method: http.MethodPost,
+			body: []byte(`{
+				"citizen_category": "unknown category",
+
+				"role":             "diplomat",
+				"experience":       "regular",
+				"gender":           "unspecified"
+			}`),
+			expectedStatus:  http.StatusBadRequest,
+			expectedMessage: "citizen_category is invalid, must be one of: below_average, average, above_average, exceptional",
+		},
+		{
+			name:   "because experience is invalid message should properly say so",
+			method: http.MethodPost,
+			body: []byte(`{
+				"experience":       "unknown experience",
+
+				"citizen_category": "average",
+				"role":             "diplomat",
+				"gender":           "unspecified"
+			}`),
+			expectedStatus:  http.StatusBadRequest,
+			expectedMessage: "experience is invalid, must be one of: recruit, rookie, intermediate, regular, veteran, elite",
+		},
+		{
+			name:   "because gender is invalid message should properly say so",
+			method: http.MethodPost,
+			body: []byte(`{
+				"gender":           "unknown gender",
+
+				"citizen_category": "average",
+				"experience":       "regular",
+				"role":             "diplomat"
+			}`),
+			expectedStatus:  http.StatusBadRequest,
+			expectedMessage: "gender is invalid, must be one of: female, male, unspecified",
+		},
+		{
+			name:   "because role is invalid message should properly say so",
+			method: http.MethodPost,
+			body: []byte(`{
+				"role":             "unknown role",
+
+				"citizen_category": "average",
+				"experience":       "regular",
+				"gender":           "unspecified"
+			}`),
+			expectedStatus:  http.StatusBadRequest,
+			expectedMessage: "role is invalid, must be one of: diplomat, engineer, entertainer, gunner, leader, marine, medic, navigator, pilot, scout, steward, technician, thug, trader",
 		},
 	}
 

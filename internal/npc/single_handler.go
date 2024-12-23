@@ -59,6 +59,23 @@ func buildCharacterRequest(npcRequest apirest.NPCRequest) (*generator.GenerateCh
 	if npcRequest.Role == "" {
 		return nil, fmt.Errorf("role is required")
 	}
+
+	if apirest.IsInvalidRole(npcRequest.Role) {
+		return nil, fmt.Errorf("role is invalid, must be one of: %s", apirest.AllRolesString())
+	}
+
+	if npcRequest.CitizenCategory != nil && apirest.IsInvalidCitizenCategory(*npcRequest.CitizenCategory) {
+		return nil, fmt.Errorf("citizen_category is invalid, must be one of: %s", apirest.AllCitizenCategoriesString())
+	}
+
+	if npcRequest.Experience != nil && apirest.IsInvalidExperience(*npcRequest.Experience) {
+		return nil, fmt.Errorf("experience is invalid, must be one of: %s", apirest.AllExperiencesString())
+	}
+
+	if npcRequest.Gender != nil && apirest.IsInvalidGender(*npcRequest.Gender) {
+		return nil, fmt.Errorf("gender is invalid, must be one of: %s", apirest.AllGendersString())
+	}
+
 	request := generator.NewGenerateCharacterRequestBuilder().
 		Role(toRole(npcRequest.Role)).
 		Experience(toExperience(npcRequest.Experience)).
