@@ -19,19 +19,19 @@ func main() {
 func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	if req.Method != http.MethodPost {
-		http.Error(w, `{"message": "Method not allowed"}`, http.StatusMethodNotAllowed)
+		http.Error(w, errorPayload("method not allowed"), http.StatusMethodNotAllowed)
 		return
 	}
 
 	var npcRequest apirest.NPCRequest
 	if err := json.NewDecoder(req.Body).Decode(&npcRequest); err != nil {
-		http.Error(w, `{"message": "Invalid request body"}`, http.StatusBadRequest)
+		http.Error(w, errorPayload("invalid request body"), http.StatusBadRequest)
 		return
 	}
 
 	npcGenerator, err := generator.NewNpcGeneratorBuilder().Build()
 	if err != nil {
-		http.Error(w, `{"message": "Failed to create NPC generator"}`, http.StatusInternalServerError)
+		http.Error(w, errorPayload("failed to create NPC generator"), http.StatusInternalServerError)
 		return
 	}
 
@@ -44,10 +44,9 @@ func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 
 	generated, err := npcGenerator.Generate(*request)
 	if err != nil {
-		http.Error(w, fmt.Sprintf(`{"message": "unable to generate NPC: %s"}`, err.Error()), http.StatusBadRequest)
+		http.Error(w, errorPayload(fmt.Sprintf("unable to generate NPC: %s", err.Error())), http.StatusBadRequest)
 		return
 	}
-	// Generate NPC response (this is a placeholder, replace with actual logic)
 	npc := apirest.NPC{
 		FirstsName:      generated.FirstName(),
 		Surname:         generated.Surname(),
@@ -59,7 +58,7 @@ func generateNPCHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	if err := json.NewEncoder(w).Encode(npc); err != nil {
-		http.Error(w, `{"message": "Failed to encode response"}`, http.StatusInternalServerError)
+		http.Error(w, errorPayload("failed to encode response"), http.StatusInternalServerError)
 	}
 }
 
@@ -232,4 +231,8 @@ func toCitizenCategory(category *apirest.CitizenCategory) generator.CitizenCateg
 	default:
 		return generator.CitizenCategoryAverage
 	}
+}
+
+func errorPayload(message string) string {
+	return fmt.Sprintf(`{"message": "%s"}`, message)
 }
