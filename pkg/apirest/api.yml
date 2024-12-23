@@ -112,7 +112,7 @@ components:
     NPC:
       type: object
       properties:
-        firsts_name:
+        first_name:
           type: string
         surname:
           type: string
@@ -129,7 +129,7 @@ components:
         characteristics:
           $ref: '#/components/schemas/Characteristics'
       required:
-        - firsts_name
+        - first_name
         - surname
         - role
         - citizen_category

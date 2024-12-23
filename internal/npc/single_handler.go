@@ -41,7 +41,7 @@ func SingleHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 	npc := apirest.NPC{
-		FirstsName:      generated.FirstName(),
+		FirstName:       generated.FirstName(),
 		Surname:         generated.Surname(),
 		Role:            toRestRole(generated.Role()),
 		CitizenCategory: toRestCitizenCategory(generated.CitizenCategory()),

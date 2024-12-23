@@ -84,7 +84,7 @@ func TestNPCSingleHandler_when_request_is_valid(t *testing.T) {
 			require.Equal(t, http.StatusOK, rr.Code)
 			assert.Equal(t, "application/json", rr.Header().Get("Content-Type"))
 			generatedNPC := extractNPC(t, rr.Body.String())
-			assert.NotEmpty(t, generatedNPC.FirstsName)
+			assert.NotEmpty(t, generatedNPC.FirstName)
 			assert.NotEmpty(t, generatedNPC.Surname)
 			assert.Len(t, generatedNPC.Characteristics, 6)
 			assert.Equal(t, tt.expectedCitizenCategory, generatedNPC.CitizenCategory)
@@ -314,7 +314,7 @@ type errorPayload struct {
 	Message string `json:"message"`
 }
 type npcPayload struct {
-	FirstsName      string         `json:"firsts_name"`
+	FirstName       string         `json:"first_name"`
 	Surname         string         `json:"surname"`
 	Characteristics map[string]int `json:"characteristics"`
 	CitizenCategory string         `json:"citizen_category"`

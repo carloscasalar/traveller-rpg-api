@@ -88,7 +88,7 @@ type NPC struct {
 	// CitizenCategory How exceptional are the characteristics of the NPC
 	CitizenCategory CitizenCategory `json:"citizen_category"`
 	Experience      Experience      `json:"experience"`
-	FirstsName      string          `json:"firsts_name"`
+	FirstName       string          `json:"first_name"`
 
 	// Role Role of the NPC
 	Role    Role     `json:"role"`
