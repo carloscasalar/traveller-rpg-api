@@ -13,6 +13,6 @@ require (
 )
 
 require (
-	github.com/carloscasalar/traveller-npc-generator v1.0.0
+	github.com/carloscasalar/traveller-npc-generator v1.0.1
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
