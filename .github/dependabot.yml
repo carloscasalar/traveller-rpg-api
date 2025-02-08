@@ -15,6 +15,22 @@ updates:
     labels:
       - "chore"
       - "dependencies"
+    groups:
+      patches:
+        patterns:
+          - "*"
+        update-types:
+          - patch
+      minors:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+      majors:
+        patterns:
+          - "*"
+        update-types:
+          - major
   - package-ecosystem: "gomod"
     directory: "/tools"
     schedule:
@@ -25,3 +41,19 @@ updates:
       - "tools"
       - "chore"
       - "dependencies"
+    groups:
+      patches:
+        patterns:
+          - "*"
+        update-types:
+          - patch
+      minors:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+      majors:
+        patterns:
+          - "*"
+        update-types:
+          - major
