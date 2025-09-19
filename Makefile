@@ -13,7 +13,7 @@ deploy:
 
 # Run the linter
 lint:
-	@revive -config .revive.toml -formatter friendly ./...
+	@go tool revive -config .revive.toml -formatter friendly ./...
 
 # Run tests
 test:
