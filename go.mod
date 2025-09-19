@@ -52,4 +52,6 @@ require (
 tool (
 	github.com/mgechev/revive
 	github.com/oapi-codegen/oapi-codegen/v2/cmd/oapi-codegen
+	github.com/syumai/workers/cmd/workers-assets-gen
+	golang.org/x/tools/cmd/goimports
 )
